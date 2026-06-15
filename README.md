@@ -1,7 +1,10 @@
 # ruby-biosyntax
 
 [![CI](https://github.com/kojix2/ruby-biosyntax/actions/workflows/ci.yml/badge.svg)](https://github.com/kojix2/ruby-biosyntax/actions/workflows/ci.yml)
+[![Gem Version](https://badge.fury.io/rb/biosyntax.svg)](https://badge.fury.io/rb/biosyntax)
 [![Lines of Code](https://img.shields.io/endpoint?url=https%3A%2F%2Ftokei.kojix2.net%2Fbadge%2Fgithub%2Fkojix2%2Fruby-biosyntax%2Flines)](https://tokei.kojix2.net/github/kojix2/ruby-biosyntax)
+[![DOI](https://zenodo.org/badge/1269890086.svg)](https://doi.org/10.5281/zenodo.20698478)
+
 
 
 :dna: [bioSyntax](https://github.com/bioSyntax/bioSyntax) - Syntax highlighting for biological data formats - for Ruby.
