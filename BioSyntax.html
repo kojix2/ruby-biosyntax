@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: BioSyntax
+  
+    &mdash; Documentation by YARD 0.9.44
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+
+  <link rel="stylesheet" href="css/common.css" type="text/css">
+
+<script type="text/javascript">
+  pathId = "BioSyntax";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (B)</a> &raquo;
+    
+    
+    <span class="title">BioSyntax</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: BioSyntax
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/biosyntax.rb<span class="defines">,<br>
+  lib/biosyntax/version.rb</span>
+
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>Ruby bindings for the vendored <code>libbiosyntax</code> tokenizer/highlighter.</p>
+<p>BioSyntax highlights biological text formats one line at a time. The parser
+and ANSI renderer are implemented by a native C extension; this module exposes
+Ruby value objects and convenience factories around that extension.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+        <h5 class="example_title"><div class='inline'><p>Highlight a VCF line and inspect spans</p></div></h5>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_highlighter'>highlighter</span> <span class='op'>=</span> <span class='const'>BioSyntax</span><span class='period'>.</span><span class='id identifier rubyid_vcf'>vcf</span>
+<span class='id identifier rubyid_line'>line</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>chr1\t42\trs1\tA\tT\t99\tPASS\tDP=10\n</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_highlighter'>highlighter</span><span class='period'>.</span><span class='id identifier rubyid_highlight'>highlight</span><span class='lparen'>(</span><span class='id identifier rubyid_line'>line</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_span'>span</span><span class='op'>|</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='lbracket'>[</span><span class='id identifier rubyid_span'>span</span><span class='period'>.</span><span class='id identifier rubyid_start'>start</span><span class='comma'>,</span> <span class='id identifier rubyid_span'>span</span><span class='period'>.</span><span class='id identifier rubyid_end'>end</span><span class='comma'>,</span> <span class='id identifier rubyid_span'>span</span><span class='period'>.</span><span class='id identifier rubyid_kind_name'>kind_name</span><span class='comma'>,</span> <span class='id identifier rubyid_span'>span</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\t</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+    
+      
+        <h5 class="example_title"><div class='inline'><p>Render ANSI-colored output</p></div></h5>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_highlighter'>highlighter</span> <span class='op'>=</span> <span class='const'>BioSyntax</span><span class='period'>.</span><span class='id identifier rubyid_fastq'>fastq</span>
+<span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_foreach'>foreach</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>reads.fastq</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>chomp:</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_line'>line</span><span class='op'>|</span>
+  <span class='id identifier rubyid_print'>print</span> <span class='id identifier rubyid_highlighter'>highlighter</span><span class='period'>.</span><span class='id identifier rubyid_colorize'>colorize</span><span class='lparen'>(</span><span class='id identifier rubyid_line'>line</span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+    
+  </div>
+
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="BioSyntax/Error.html" title="BioSyntax::Error (class)">Error</a></span>, <span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span>, <span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span>, <span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span>, <span class='object_link'><a href="BioSyntax/Span.html" title="BioSyntax::Span (class)">Span</a></span>, <span class='object_link'><a href="BioSyntax/UnknownKindError.html" title="BioSyntax::UnknownKindError (class)">UnknownKindError</a></span>, <span class='object_link'><a href="BioSyntax/UnsupportedFormatError.html" title="BioSyntax::UnsupportedFormatError (class)">UnsupportedFormatError</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="LIBBIOSYNTAX_VERSION-constant" class="">LIBBIOSYNTAX_VERSION =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Version string reported by the vendored native <code>libbiosyntax</code> core.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Native</span><span class='period'>.</span><span class='id identifier rubyid_libbiosyntax_version'>libbiosyntax_version</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="LIBBIOSYNTAX_ABI_VERSION-constant" class="">LIBBIOSYNTAX_ABI_VERSION =
+          <div class="docstring">
+  <div class="discussion">
+    <p>ABI version reported by the vendored native <code>libbiosyntax</code> core.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Native</span><span class='period'>.</span><span class='id identifier rubyid_abi_version'>abi_version</span></pre></dd>
+      
+        <dt id="FORMATS-constant" class="">FORMATS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Supported formats keyed by canonical format name.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span>}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>RAW_FORMATS</span><span class='period'>.</span><span class='id identifier rubyid_each_with_object'>each_with_object</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='op'>|</span>
+  <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+
+  <span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="BioSyntax/Format.html#initialize-instance_method" title="BioSyntax::Format#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+    <span class='label'>id:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:id</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>name:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>description:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:description</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>stateful:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:stateful</span><span class='rparen'>)</span>
+  <span class='rparen'>)</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_format'>format</span>
+<span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="KINDS-constant" class="">KINDS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Known token kinds keyed by canonical kind name.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{Symbol =&gt; <span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span>}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>RAW_KINDS</span><span class='period'>.</span><span class='id identifier rubyid_each_with_object'>each_with_object</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_row'>row</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='op'>|</span>
+  <span class='id identifier rubyid_kind'>kind</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="BioSyntax/Kind.html#initialize-instance_method" title="BioSyntax::Kind#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+    <span class='label'>id:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:id</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>name:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>scope:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:scope</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>foreground:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:foreground</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>background:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:background</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>font_style:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:font_style</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>ansi_sgr:</span> <span class='id identifier rubyid_row'>row</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:ansi_sgr</span><span class='rparen'>)</span>
+  <span class='rparen'>)</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_kind'>kind</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_kind'>kind</span>
+<span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="FORMAT_NAMES-constant" class="">FORMAT_NAMES =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Returns supported canonical format names.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>supported canonical format names</p></div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="#FORMATS-constant" title="BioSyntax::FORMATS (constant)">FORMATS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="KIND_NAMES-constant" class="">KIND_NAMES =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Returns known canonical kind names.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>known canonical kind names</p></div>
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="#KINDS-constant" title="BioSyntax::KINDS (constant)">KINDS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="SCOPES-constant" class="">SCOPES =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Token kinds grouped by semantic scope.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{String =&gt; Array&lt;<span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span>&gt;}</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'><span class='object_link'><a href="#KINDS-constant" title="BioSyntax::KINDS (constant)">KINDS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_each_with_object'>each_with_object</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_hash'>hash</span><span class='comma'>,</span> <span class='id identifier rubyid_key'>key</span><span class='op'>|</span> <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_kind'>kind</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='op'>|</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_kind'>kind</span><span class='period'>.</span><span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_kind'>kind</span>
+<span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_each_with_object'>each_with_object</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='comma'>,</span> <span class='id identifier rubyid_kinds'>kinds</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='op'>|</span>
+  <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_kinds'>kinds</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span>
+<span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="VERSION-constant" class="">VERSION =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Ruby gem version.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0.1.0</span><span class='tstring_end'>&#39;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#[]-class_method" title="[] (class method)">.<strong>[]</strong>(format)  &#x21d2; Highlighter </a>
+    
+
+    
+      (also: highlighter)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Create a highlighter for a format.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format-class_method" title="format (class method)">.<strong>format</strong>(value)  &#x21d2; Format </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Resolve a format object from a name, alias, id, or existing object.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format_name-class_method" title="format_name (class method)">.<strong>format_name</strong>(value)  &#x21d2; Symbol<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Resolve the canonical name for a format.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#format_supported%3F-class_method" title="format_supported? (class method)">.<strong>format_supported?</strong>(value)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#formats-class_method" title="formats (class method)">.<strong>formats</strong>  &#x21d2; Array&lt;Symbol&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Supported canonical format names.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#guess-class_method" title="guess (class method)">.<strong>guess</strong>(path_or_extension)  &#x21d2; Highlighter<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Guess a format from a path or extension and create a highlighter.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#guess_format-class_method" title="guess_format (class method)">.<strong>guess_format</strong>(path_or_extension)  &#x21d2; Symbol<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Guess a format from a path or extension.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#kind-class_method" title="kind (class method)">.<strong>kind</strong>(value)  &#x21d2; Kind </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Resolve token kind metadata from a name, id, or existing object.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#kind_known%3F-class_method" title="kind_known? (class method)">.<strong>kind_known?</strong>(value)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#kind_name-class_method" title="kind_name (class method)">.<strong>kind_name</strong>(value)  &#x21d2; Symbol<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Resolve the canonical name for a token kind.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#kinds-class_method" title="kinds (class method)">.<strong>kinds</strong>  &#x21d2; Array&lt;Symbol&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Known canonical kind names.</p></div></span>
+  
+</li>
+
+      
+    </ul>
+    
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="[]-class_method">
+  
+    .<strong>[]</strong>(format)  &#x21d2; <tt><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='highlighter-class_method'>highlighter</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Create a highlighter for a format.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>format</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>format object, name, alias, or native id</p></div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/UnsupportedFormatError.html" title="BioSyntax::UnsupportedFormatError (class)">UnsupportedFormatError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>if the format is not supported</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+410
+411
+412</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 410</span>
+
+<span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="BioSyntax/Highlighter.html#initialize-instance_method" title="BioSyntax::Highlighter#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="format-class_method">
+  
+    .<strong>format</strong>(value)  &#x21d2; <tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Resolve a format object from a name, alias, id, or existing object.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/UnsupportedFormatError.html" title="BioSyntax::UnsupportedFormatError (class)">UnsupportedFormatError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>if the format is not supported</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 430</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_format'>format</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_found'>found</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_value'>value</span>
+          <span class='kw'>when</span> <span class='const'>Integer</span>
+            <span class='const'>FORMATS_BY_ID</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span>
+          <span class='kw'>else</span>
+            <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+            <span class='const'><span class='object_link'><a href="#FORMATS-constant" title="BioSyntax::FORMATS (constant)">FORMATS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>||</span>
+              <span class='const'><span class='object_link'><a href="#FORMATS-constant" title="BioSyntax::FORMATS (constant)">FORMATS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span> <span class='op'>||</span>
+              <span class='const'>FORMATS_BY_ID</span><span class='lbracket'>[</span><span class='const'>Native</span><span class='period'>.</span><span class='id identifier rubyid_format_id_from_name'>format_id_from_name</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+          <span class='kw'>end</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_found'>found</span> <span class='kw'>if</span> <span class='id identifier rubyid_found'>found</span>
+
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="BioSyntax/UnsupportedFormatError.html" title="BioSyntax::UnsupportedFormatError (class)">UnsupportedFormatError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>unsupported format: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="format_name-class_method">
+  
+    .<strong>format_name</strong>(value)  &#x21d2; <tt>Symbol</tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Resolve the canonical name for a format.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+452
+453
+454
+455
+456</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 452</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_format_name'>format_name</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_format'>format</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+<span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="BioSyntax/UnsupportedFormatError.html" title="BioSyntax::UnsupportedFormatError (class)">UnsupportedFormatError</a></span></span>
+  <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="format_supported?-class_method">
+  
+    .<strong>format_supported?</strong>(value)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Format.html" title="BioSyntax::Format (class)">Format</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+460
+461
+462</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 460</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_format_supported?'>format_supported?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='op'>!</span><span class='id identifier rubyid_format_name'>format_name</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="formats-class_method">
+  
+    .<strong>formats</strong>  &#x21d2; <tt>Array&lt;Symbol&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns supported canonical format names.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>supported canonical format names</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+416
+417
+418</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 416</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_formats'>formats</span>
+  <span class='const'><span class='object_link'><a href="#FORMAT_NAMES-constant" title="BioSyntax::FORMAT_NAMES (constant)">FORMAT_NAMES</a></span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="guess-class_method">
+  
+    .<strong>guess</strong>(path_or_extension)  &#x21d2; <tt><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Guess a format from a path or extension and create a highlighter.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>path_or_extension</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>#to_s</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+514
+515
+516
+517</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 514</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_guess'>guess</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_extension'>path_or_extension</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_guess_format'>guess_format</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_extension'>path_or_extension</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_name'>name</span> <span class='op'>&amp;&amp;</span> <span class='const'><span class='object_link'><a href="BioSyntax/Highlighter.html" title="BioSyntax::Highlighter (class)">Highlighter</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="BioSyntax/Highlighter.html#initialize-instance_method" title="BioSyntax::Highlighter#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="guess_format-class_method">
+  
+    .<strong>guess_format</strong>(path_or_extension)  &#x21d2; <tt>Symbol</tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Guess a format from a path or extension.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>path_or_extension</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>#to_s</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>canonical format name if recognized</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+504
+505
+506
+507
+508</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 504</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_guess_format'>guess_format</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_extension'>path_or_extension</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='const'>Native</span><span class='period'>.</span><span class='id identifier rubyid_guess_format_id'>guess_format_id</span><span class='lparen'>(</span><span class='id identifier rubyid_path_or_extension'>path_or_extension</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='const'>FORMATS_BY_ID</span><span class='lbracket'>[</span><span class='id identifier rubyid_id'>id</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_format'>format</span><span class='op'>&amp;.</span><span class='id identifier rubyid_name'>name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="kind-class_method">
+  
+    .<strong>kind</strong>(value)  &#x21d2; <tt><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Resolve token kind metadata from a name, id, or existing object.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/UnknownKindError.html" title="BioSyntax::UnknownKindError (class)">UnknownKindError</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>if the kind is not known</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 469</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_kind'>kind</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_value'>value</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_found'>found</span> <span class='op'>=</span> <span class='kw'>case</span> <span class='id identifier rubyid_value'>value</span>
+          <span class='kw'>when</span> <span class='const'>Integer</span>
+            <span class='const'>KINDS_BY_ID</span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span>
+          <span class='kw'>else</span>
+            <span class='const'><span class='object_link'><a href="#KINDS-constant" title="BioSyntax::KINDS (constant)">KINDS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_normalize_name'>normalize_name</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='const'><span class='object_link'><a href="#KINDS-constant" title="BioSyntax::KINDS (constant)">KINDS</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rbracket'>]</span>
+          <span class='kw'>end</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_found'>found</span> <span class='kw'>if</span> <span class='id identifier rubyid_found'>found</span>
+
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="BioSyntax/UnknownKindError.html" title="BioSyntax::UnknownKindError (class)">UnknownKindError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>unknown kind: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="kind_known?-class_method">
+  
+    .<strong>kind_known?</strong>(value)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+496
+497
+498</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 496</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_kind_known?'>kind_known?</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='op'>!</span><span class='id identifier rubyid_kind_name'>kind_name</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="kind_name-class_method">
+  
+    .<strong>kind_name</strong>(value)  &#x21d2; <tt>Symbol</tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Resolve the canonical name for a token kind.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="BioSyntax/Kind.html" title="BioSyntax::Kind (class)">Kind</a></span></tt>, <tt>Symbol</tt>, <tt>String</tt>, <tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+488
+489
+490
+491
+492</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 488</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_kind_name'>kind_name</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_kind'>kind</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+<span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="BioSyntax/UnknownKindError.html" title="BioSyntax::UnknownKindError (class)">UnknownKindError</a></span></span>
+  <span class='kw'>nil</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="kinds-class_method">
+  
+    .<strong>kinds</strong>  &#x21d2; <tt>Array&lt;Symbol&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns known canonical kind names.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>known canonical kind names</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+421
+422
+423</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/biosyntax.rb', line 421</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_kinds'>kinds</span>
+  <span class='const'><span class='object_link'><a href="#KIND_NAMES-constant" title="BioSyntax::KIND_NAMES (constant)">KIND_NAMES</a></span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jun 15 07:48:55 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.44 (ruby-4.0.5).
+</div>
+
+    </div>
+  </body>
+</html>
