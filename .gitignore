@@ -1,0 +1,37 @@
+/.bundle/
+/.ruby-lsp/
+
+/Gemfile.lock
+
+# YARD output
+/doc/
+/.yardoc/
+
+/pkg/
+/coverage/
+/tmp/
+
+# Gem packages
+/*.gem
+
+# Native extension build artifacts
+*.o
+*.obj
+*.so
+*.bundle
+*.dll
+*.dylib
+*.dSYM/
+*.def
+*.exp
+*.lib
+
+/ext/**/Makefile
+/ext/**/mkmf.log
+/ext/biosyntax/biosyntax
+/lib/biosyntax/biosyntax_ext.*
+
+# Local editor and OS files
+.DS_Store
+/.idea/
+/.vscode/
