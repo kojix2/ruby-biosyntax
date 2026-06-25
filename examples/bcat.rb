@@ -9,7 +9,7 @@ options = { format: nil }
 parser = OptionParser.new do |opts|
   opts.banner = 'usage: bcat [options] [FILE ...]'
 
-  opts.on('-l', '--language FORMAT', 'Highlight as FORMAT') do |format|
+  opts.on('-f', '--format FORMAT', 'Highlight as FORMAT') do |format|
     options[:format] = format
   end
 
