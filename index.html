@@ -132,16 +132,14 @@ Hyphenated format names use underscores for factory methods.</p>
 </span></code></pre>
 <p>The metadata is generated from <code>libbiosyntax</code> at load time. The Ruby side does
 not maintain a separate hand-written table of formats or kinds.</p>
-<h2 id="Examples">Examples</h2>
-<p>This gem does not install a CLI. See <code>examples/</code> for small scripts:</p>
-<pre class="code sh"><code class="sh">ruby examples/bcat.rb sample.vcf
-ruby examples/bcat.rb -l fastq reads.fastq
-ruby examples/bcat.rb -l
-ruby examples/inspect_spans.rb sample.vcf
+<h2 id="Command_line">Command line</h2>
+<p>Installing the gem also installs <code>biocat</code>:</p>
+<pre class="code sh"><code class="sh">biocat sample.vcf
+biocat --format fastq reads.fastq
+biocat -l
 </code></pre>
-<p><code>bcat.rb</code> guesses the format from the file name when possible. Use <code>-l</code> /
-<code>--language</code> to pass a format explicitly. Calling <code>-l</code> without an argument
-prints the supported format names.</p>
+<p><code>.gz</code>/<code>.bgz</code> are decompressed automatically. BAM/CRAM/BCF require optional
+<code>ruby-htslib</code> (<code>gem install htslib</code>).</p>
 <h2 id="Development_tasks">Development tasks</h2>
 <pre class="code sh"><code class="sh">bundle exec rake -T
 bundle exec rake test
@@ -170,7 +168,7 @@ Public License version 3 only. This gem is therefore distributed under
 <a href="https://github.com/bioSyntax/bioSyntax">https://github.com/bioSyntax/bioSyntax</a></p></div></div>
 
       <div id="footer">
-  Generated on Thu Jun 25 02:07:17 2026 by
+  Generated on Fri Jul  3 12:16:26 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.44 (ruby-4.0.5).
 </div>
