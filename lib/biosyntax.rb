@@ -436,8 +436,8 @@ module BioSyntax
               else
                 name = value.to_s.downcase
                 FORMATS[name.to_sym] ||
-                  FORMATS[name.tr('_', '-').to_sym] ||
-                  FORMATS_BY_ID[Native.format_id_from_name(name)]
+                FORMATS[name.tr('_', '-').to_sym] ||
+                FORMATS_BY_ID[Native.format_id_from_name(name)]
               end
 
       return found if found
