@@ -101,20 +101,18 @@ BioSyntax.guess_format("a.vcf.gz") # :vcf
 The metadata is generated from `libbiosyntax` at load time. The Ruby side does
 not maintain a separate hand-written table of formats or kinds.
 
-## Examples
+## Command line
 
-This gem does not install a CLI. See `examples/` for small scripts:
+Installing the gem also installs `biocat`:
 
 ```sh
-ruby examples/bcat.rb sample.vcf
-ruby examples/bcat.rb -l fastq reads.fastq
-ruby examples/bcat.rb -l
-ruby examples/inspect_spans.rb sample.vcf
+biocat sample.vcf
+biocat --format fastq reads.fastq
+biocat -l
 ```
 
-`bcat.rb` guesses the format from the file name when possible. Use `-l` /
-`--language` to pass a format explicitly. Calling `-l` without an argument
-prints the supported format names.
+`.gz`/`.bgz` are decompressed automatically. BAM/CRAM/BCF require optional
+`ruby-htslib` (`gem install htslib`).
 
 ## Development tasks
 

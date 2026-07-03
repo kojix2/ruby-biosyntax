@@ -12,7 +12,9 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 3.1'
 
-  spec.files         = Dir['*.{md,txt}', 'ext/**/*.{c,h,rb}', 'lib/**/*.rb']
+  spec.files         = Dir['*.{md,txt}', 'exe/*', 'ext/**/*.{c,h,rb}', 'lib/**/*.rb']
+  spec.bindir        = 'exe'
+  spec.executables   = ['biocat']
   spec.extensions    = ['ext/biosyntax/extconf.rb']
   spec.require_path  = 'lib'
 end

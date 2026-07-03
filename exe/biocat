@@ -1,0 +1,131 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+require 'zlib'
+require 'biosyntax'
+
+options = { format: nil, list_formats: false }
+
+BINARY_FORMATS = {
+  '.bam' => :sam,
+  '.cram' => :sam,
+  '.bcf' => :vcf
+}.freeze
+
+def binary_format_for(path, requested_format)
+  unless path == '-'
+    ext = File.extname(path).downcase
+    return BINARY_FORMATS[ext] if BINARY_FORMATS.key?(ext)
+  end
+
+  case requested_format&.to_s&.downcase
+  when 'bam', 'cram' then :sam
+  when 'bcf' then :vcf
+  end
+end
+
+def require_htslib!
+  require 'htslib'
+rescue LoadError => e
+  warn "[biocat] ruby-htslib is required to read BAM/CRAM/BCF files: #{e.message}"
+  warn '[biocat] install it with `gem install htslib`'
+  exit 1
+end
+
+def emit_colored(text, highlighter)
+  text.each_line do |line|
+    print(highlighter ? highlighter.colorize(line) : line)
+  end
+end
+
+def emit_record(record, highlighter)
+  line = record.to_s
+  line = "#{line}\n" unless line.end_with?("\n")
+  emit_colored(line, highlighter)
+end
+
+def emit_htslib_file(path, format, highlighter)
+  require_htslib!
+
+  case format
+  when :sam
+    HTS::Bam.open(path) do |bam|
+      emit_colored(bam.header.to_s, highlighter)
+      bam.each { |record| emit_record(record, highlighter) }
+    end
+  when :vcf
+    HTS::Bcf.open(path) do |bcf|
+      emit_colored(bcf.header.to_s, highlighter)
+      bcf.each { |record| emit_record(record, highlighter) }
+    end
+  end
+end
+
+parser = OptionParser.new do |opts|
+  opts.banner = 'usage: biocat [options] [FILE ...]'
+
+  opts.on('-f', '--format FORMAT', 'Highlight as FORMAT') do |format|
+    options[:format] = format
+  end
+
+  opts.on('-l', '--list-formats', 'Print supported format names') do
+    options[:list_formats] = true
+  end
+
+  opts.on('-h', '--help', 'Print this help') do
+    puts opts
+    exit
+  end
+end
+
+begin
+  parser.parse!
+
+  if options[:list_formats]
+    puts BioSyntax::FORMAT_NAMES.join("\n")
+    exit
+  end
+
+  paths = ARGV.empty? ? ['-'] : ARGV
+
+  paths.each do |path|
+    binary_format = binary_format_for(path, options[:format])
+    format = binary_format || options[:format]
+    format ||= BioSyntax.guess_format(path) unless path == '-'
+
+    highlighter = format ? BioSyntax[format] : nil
+    if binary_format
+      emit_htslib_file(path, binary_format, highlighter)
+      next
+    end
+
+    input =
+      if path == '-'
+        $stdin
+      elsif path.downcase.end_with?('.gz', '.bgz')
+        Zlib::GzipReader.open(path)
+      else
+        File.open(path, 'rb')
+      end
+
+    begin
+      emit_colored(input, highlighter)
+    ensure
+      input.close unless path == '-'
+    end
+  end
+rescue OptionParser::ParseError, BioSyntax::Error => e
+  warn "[biocat] #{e.message}"
+  warn parser
+  exit 2
+rescue SystemCallError => e
+  warn "[biocat] #{e.message}"
+  exit 1
+rescue Zlib::GzipFile::Error => e
+  warn "[biocat] #{e.message}"
+  exit 1
+rescue StandardError => e
+  warn "[biocat] #{e.message}"
+  exit 1
+end
