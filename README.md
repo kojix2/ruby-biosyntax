@@ -147,9 +147,10 @@ bundle exec rake
 
 ## License
 
-`biosyntax` vendors `libbiosyntax`, which is licensed under the GNU General
-Public License version 3 only. This gem is therefore distributed under
-`GPL-3.0-only`. See `LICENSE.md`.
+The Ruby code and native binding are licensed under the [MIT License](LICENSE.md).
+The vendored `libbiosyntax` source is licensed under
+[LGPL-2.1-or-later](LICENSE.libbiosyntax.md), and the compiled extension is
+subject to its terms.
 
 This project is inspired by the original bioSyntax project:
 <https://github.com/bioSyntax/bioSyntax>

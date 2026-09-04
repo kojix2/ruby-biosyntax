@@ -26,7 +26,8 @@ namespace :update do
 
     {
       'include/biosyntax.h' => 'ext/biosyntax/biosyntax.h',
-      'src/biosyntax.c' => 'ext/biosyntax/biosyntax.c'
+      'src/biosyntax.c' => 'ext/biosyntax/biosyntax.c',
+      'LICENSE.md' => 'LICENSE.libbiosyntax.md'
     }.each do |source, target|
       url = "#{base_url}/#{source}"
       File.write(target, URI.open(url, &:read))

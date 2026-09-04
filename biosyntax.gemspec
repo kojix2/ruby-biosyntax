@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.version       = BioSyntax::VERSION
   spec.summary       = 'Ruby native binding for libbiosyntax'
   spec.homepage      = 'https://github.com/kojix2/biosyntax'
-  spec.license       = 'GPL-3.0-only'
+  spec.license       = 'MIT'
 
   spec.author        = 'kojix2'
   spec.email         = '2xijok@gmail.com'

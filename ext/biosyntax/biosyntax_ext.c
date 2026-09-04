@@ -1,6 +1,6 @@
 /*
  * Ruby native extension for libbiosyntax.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: MIT
  */
 
 #include "ruby.h"

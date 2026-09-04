@@ -1,7 +1,7 @@
 
 /*
  * libbiosyntax: dependency-free C tokenizer/highlighter core for biological files.
- * SPDX-License-Identifier: GPL-3.0-only
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 #define BIOSYN_BUILDING_LIBRARY
 #include "biosyntax.h"
@@ -431,25 +431,25 @@ static uint32_t mapq_score(int64_t v) { if (v == 255 || v < 10) return BIOSYN_CL
 
 static void hi_fasta_scheme(writer_t *w, const char *s, size_t n, uint32_t scheme) { n = trim_eol(s, n); if (!n) return; if (s[0] == '>') emit(w, 0, n, BIOSYN_CLASS_HEADER); else if (s[0] == ';' || s[0] == '#') emit(w, 0, n, BIOSYN_CLASS_COMMENT); else seq_runs_scheme(w, s, 0, n, scheme); }
 static int is_start_codon(const char *s, size_t i, size_t n) {
-    unsigned char a, b, c;
+    int a, b, c;
     if (i + 3 > n) return 0;
     a = up((unsigned char)s[i]); b = up((unsigned char)s[i + 1]); c = up((unsigned char)s[i + 2]);
     return a == 'A' && b == 'T' && c == 'G';
 }
 static int is_stop_codon(const char *s, size_t i, size_t n) {
-    unsigned char a, b, c;
+    int a, b, c;
     if (i + 3 > n) return 0;
     a = up((unsigned char)s[i]); b = up((unsigned char)s[i + 1]); c = up((unsigned char)s[i + 2]);
     return a == 'T' && ((b == 'A' && (c == 'A' || c == 'G')) || (b == 'G' && c == 'A'));
 }
 static int is_rna_start_codon(const char *s, size_t i, size_t n) {
-    unsigned char a, b, c;
+    int a, b, c;
     if (i + 3 > n) return 0;
     a = up((unsigned char)s[i]); b = up((unsigned char)s[i + 1]); c = up((unsigned char)s[i + 2]);
     return a == 'A' && b == 'U' && c == 'G';
 }
 static int is_rna_stop_codon(const char *s, size_t i, size_t n) {
-    unsigned char a, b, c;
+    int a, b, c;
     if (i + 3 > n) return 0;
     a = up((unsigned char)s[i]); b = up((unsigned char)s[i + 1]); c = up((unsigned char)s[i + 2]);
     return a == 'U' && ((b == 'A' && (c == 'A' || c == 'G')) || (b == 'G' && c == 'A'));
