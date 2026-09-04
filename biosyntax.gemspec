@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'biosyntax'
   spec.version       = BioSyntax::VERSION
   spec.summary       = 'Ruby native binding for libbiosyntax'
-  spec.homepage      = 'https://github.com/kojix2/biosyntax'
+  spec.homepage      = 'https://github.com/kojix2/ruby-biosyntax'
   spec.license       = 'MIT'
 
   spec.author        = 'kojix2'
